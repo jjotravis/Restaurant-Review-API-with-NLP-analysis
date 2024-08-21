@@ -17,3 +17,7 @@ CREATE TABLE Reviews (
     sentiment VARCHAR(10),
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS Users (
+    
+)

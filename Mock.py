@@ -2,29 +2,21 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import redis
 import mysql.connector
-import spacy
-from spacytextblob.spacytextblob import SpacyTextBlob
+from textblob import TextBlob
 
 # Connect to MySQL
 conn = mysql.connector.connect(
     host="localhost",
-    user="your_username",
-    password="your_password",
-    database="restaurant_db"
+    user="root",
+    password="pass",
+    database="Hotel_Review"
 )
 cursor = conn.cursor()
 
 # Connect to Redis
 r = redis.Redis(host='localhost', port=6379, db=0)
 
-# Initialize FastAPI app
 app = FastAPI()
-
-# Load spaCy model
-nlp = spacy.load('en_core_web_sm')
-
-# Add TextBlob sentiment analysis to spaCy pipeline
-nlp.add_pipe('spacytextblob')
 
 class Review(BaseModel):
     restaurant_id: int
@@ -32,8 +24,8 @@ class Review(BaseModel):
     review: str
 
 def analyze_sentiment(review_text):
-    doc = nlp(review_text)
-    polarity = doc._.blob.polarity
+    blob = TextBlob(review_text)
+    polarity = blob.sentiment.polarity
     return "positive" if polarity > 0 else "negative"
 
 @app.post("/reviews")
