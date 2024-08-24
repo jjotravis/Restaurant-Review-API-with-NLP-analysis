@@ -21,15 +21,19 @@ class DBClient:
         return self.connection.is_connected()
 
     def nb_users(self):
-        query = "SELECT COUNT(*) FROM users"
+        query = "SELECT COUNT(*) FROM Users"
         self.cursor.execute(query)
         count = self.cursor.fetchone()[0]
         return count
 
     def nb_restaurant(self):
-        query = "SELECT COUNT(*) FROM restaurants"
+        query = "SELECT COUNT(*) FROM Restaurants"
         self.cursor.execute(query)
         count = self.cursor.fetchone()[0]
         return count
+    
+    def close(self):
+        self.cursor.close()
+        self.conn.close()
 
 db_client = DBClient()
